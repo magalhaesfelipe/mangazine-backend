@@ -1,7 +1,7 @@
 {
   "name": "mangazine",
   "version": "1.0.0",
-  "description": "MB V1",
+  "description": "Mangazine Web App V1.0",
   "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
