@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import app from './app'; //
+import app from '../app';
 
 // Listening and Catching Uncaught Exceptions
 process.on('uncaughtException', (err) => {
@@ -11,7 +11,6 @@ process.on('uncaughtException', (err) => {
 
 dotenv.config({ path: './config.env' });
 
-const PORT = process.env.PORT || 2000;
 const DB = process.env.DATABASE;
 
 if (!DB) {
@@ -20,9 +19,10 @@ if (!DB) {
   );
 }
 
+
 mongoose.connect(DB).then(() => console.log('DB connected successfully'));
-const server = app.listen(PORT, () => {
-  console.log(`App running on PORT: ${PORT}`);
+const server = app.listen(3000, () => {
+  console.log(`App running on PORT 3000`);
 });
 
 // Listening to the unhandled rejection event

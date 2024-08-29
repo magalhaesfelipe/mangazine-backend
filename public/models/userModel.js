@@ -9,7 +9,9 @@ const userSchema = new mongoose_1.default.Schema({
     userName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     role: { type: String, default: 'user' },
-    readList: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: 'Title' }],
+    readList: [
+        { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'Title', unique: true },
+    ],
     lists: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: 'List' }],
 }, { timestamps: true });
 const User = mongoose_1.default.model('User', userSchema);

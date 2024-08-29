@@ -10,6 +10,7 @@ import titleRouter from './routes/titleRoutes';
 import userRouter from './routes/userRoutes';
 import ratingRouter from './routes/ratingRoutes';
 import listRouter from './routes/listRoutes';
+import { send } from 'process';
 
 const app = express();
 mongoose.set('strictQuery', false);
@@ -29,6 +30,7 @@ app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 
 // ROUTES
+app.use('/api/v1/test', (req, res) => res.send('Express on Vercel'));
 app.use('/api/v1/titles', titleRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/rating', ratingRouter);

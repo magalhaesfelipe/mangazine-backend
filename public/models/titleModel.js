@@ -28,7 +28,8 @@ const titleSchema = new mongoose_1.default.Schema({
     otherCovers: [String],
     status: String,
     type: String,
+    demographic: String,
     alternateName: String,
 });
 const Title = mongoose_1.default.model('Title', titleSchema);
-module.exports = Title;
+exports.default = Title;
