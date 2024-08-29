@@ -41,5 +41,4 @@ app.all('*', (req, res, next) => {
 });
 
 app.use(globalErrorHandler);
-
 export default app;
