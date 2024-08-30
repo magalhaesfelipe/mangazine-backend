@@ -3,14 +3,13 @@ import mongoose from 'mongoose';
 import morgan from 'morgan'; // Middleware for logging HTTP requests
 import cors from 'cors'; // Middleware to handle cross-origin HTTP requests
 
-import AppError from './utils/appError';
-import { globalErrorHandler } from './controllers/errorController';
+import AppError from './utils/appError.js';
+import { globalErrorHandler } from './controllers/errorController.js';
 
-import titleRouter from './routes/titleRoutes';
-import userRouter from './routes/userRoutes';
-import ratingRouter from './routes/ratingRoutes';
-import listRouter from './routes/listRoutes';
-import { send } from 'process';
+import titleRouter from './routes/titleRoutes.js';
+import userRouter from './routes/userRoutes.js';
+import ratingRouter from './routes/ratingRoutes.js';
+import listRouter from './routes/listRoutes.js';
 
 const app = express();
 mongoose.set('strictQuery', false);
@@ -27,7 +26,6 @@ app.use(cors());
 
 app.use(morgan('dev')); // 'dev' defines the log format, there are other formats like 'tiny' or 'combined'
 app.use(express.json());
-app.use(express.static(`${__dirname}/public`));
 
 // ROUTES
 app.use('/api/v1/test', (req, res) => res.send('Express on Vercel'));
@@ -43,4 +41,5 @@ app.all('*', (req, res, next) => {
 });
 
 app.use(globalErrorHandler);
+
 export default app;

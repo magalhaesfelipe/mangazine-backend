@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import app from '../app';
+import app from './app.js';
 
 // Listening and Catching Uncaught Exceptions
 process.on('uncaughtException', (err) => {

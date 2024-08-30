@@ -4,7 +4,7 @@ import {
   getAverageRating,
   createRating,
   deleteRating,
-} from '../controllers/ratingController';
+} from '../controllers/ratingController.js';
 
 const router = express.Router();
 

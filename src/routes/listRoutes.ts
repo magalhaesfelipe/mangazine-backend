@@ -6,7 +6,7 @@ import {
   addToList,
   removeFromList,
   getAllLists,
-} from '../controllers/listController';
+} from '../controllers/listController.js';
 
 const router = express.Router();
 

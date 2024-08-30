@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import User from '../models/userModel';
-import List from '../models/listModel';
-import AppError from '../utils/appError';
-import catchAsync from '../utils/catchAsync';
+import User from '../models/userModel.js';
+import List from '../models/listModel.js';
+import AppError from '../utils/appError.js';
+import catchAsync from '../utils/catchAsync.js';
 import { Types } from 'mongoose';
 
 export const getAllLists = catchAsync(
