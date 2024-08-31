@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 import app from './app.js';
 
 // Listening and Catching Uncaught Exceptions
@@ -12,14 +12,13 @@ process.on('uncaughtException', (err) => {
 dotenv.config({ path: './config.env' });
 
 const DB = process.env.DATABASE;
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 if (!DB) {
   throw new Error(
     'Database connection string is not defined in environment variables. ',
   );
 }
-
 
 mongoose.connect(DB).then(() => console.log('DB connected successfully'));
 const server = app.listen(port, () => {
