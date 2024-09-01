@@ -28,12 +28,12 @@ app.use(morgan('dev')); // 'dev' defines the log format, there are other formats
 app.use(express.json());
 
 // ROUTES
-app.use('/api/v1/test', (req, res) => res.send('Express on Vercel'));
-app.use('/api/v1/titles', titleRouter);
-app.use('/api/v1/user', userRouter);
-app.use('/api/v1/rating', ratingRouter);
-app.use('/api/v1/lists', listRouter);
-app.use('/api/v1/readlist', listRouter);
+app.use('/test', (req, res) => res.send('Express on Vercel'));
+app.use('/titles', titleRouter);
+app.use('/user', userRouter);
+app.use('/rating', ratingRouter);
+app.use('/lists', listRouter);
+app.use('/readlist', listRouter);
 
 // needs to be the last part after all the other routes
 app.all('*', (req, res, next) => {
