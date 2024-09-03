@@ -58,12 +58,12 @@ const globalErrorHandler = (err, req, res, next) => {
         sendErrorDev(err, res);
     }
     else if (process.env.NODE_ENV === 'production') {
-        let error = Object.assign({}, err);
+        let error = { ...err };
         // Manually copy non-enumerable properties
-        error.message = err === null || err === void 0 ? void 0 : err.message;
-        error.name = err === null || err === void 0 ? void 0 : err.name;
-        error.code = err === null || err === void 0 ? void 0 : err.code;
-        error.errmsg = err === null || err === void 0 ? void 0 : err.errmsg;
+        error.message = err?.message;
+        error.name = err?.name;
+        error.code = err?.code;
+        error.errmsg = err?.errmsg;
         if (err.name === 'CastError')
             error = handleCastErrorDB(error);
         if (err.code === 11000)

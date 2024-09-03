@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class AppError extends Error {
+    statusCode;
+    status;
+    isOperational;
     constructor(message, statusCode) {
         super(message); // Whatever we pass into the the parent/super class 'Error', is gonna be the message property
         this.statusCode = statusCode;

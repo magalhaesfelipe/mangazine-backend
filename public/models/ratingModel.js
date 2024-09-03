@@ -23,4 +23,4 @@ const ratingSchema = new mongoose_1.default.Schema({
     },
 }, { timestamps: true });
 const Rating = mongoose_1.default.model('Rating', ratingSchema);
-module.exports = Rating;
+exports.default = Rating;

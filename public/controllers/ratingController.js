@@ -1,38 +1,34 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteRating = exports.createRating = exports.getAverageRating = exports.getRating = void 0;
-const Rating = require('../models/ratingModel');
-const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
+const ratingModel_1 = __importDefault(require("../models/ratingModel"));
+const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 // GET RATING
-exports.getRating = catchAsync((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getRating = (0, catchAsync_1.default)(async (req, res, next) => {
     const { userId, titleId } = req.params;
-    const userRating = yield Rating.findOne({
+    const userRating = await ratingModel_1.default.findOne({
         userId: userId,
         titleId: titleId,
     });
     if (!userRating) {
-        return next(new AppError('No rating found for this user with that title', 404));
+        res.status(404).json({
+            status: 'success',
+            message: 'No rating found for this user'
+        });
     }
     res.status(200).json({
         status: 'success',
         message: 'User data rating',
         userRating,
     });
-}));
+});
 // GET AVERAGE RATING
-exports.getAverageRating = catchAsync((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getAverageRating = (0, catchAsync_1.default)(async (req, res, next) => {
     const { titleId } = req.params;
-    const titleRatings = yield Rating.aggregate([
+    const titleRatings = await ratingModel_1.default.aggregate([
         { $match: { titleId: titleId } },
         { $group: { _id: '$titleId', averageRating: { $avg: '$rating' } } },
     ]);
@@ -43,15 +39,15 @@ exports.getAverageRating = catchAsync((req, res, next) => __awaiter(void 0, void
         message: 'OVERALL RATING: ',
         averageRating: avgRating,
     });
-}));
+});
 // CREATE OR UPDATE RATING
-exports.createRating = catchAsync((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.createRating = (0, catchAsync_1.default)(async (req, res, next) => {
     const { userId, titleId, ratingValue } = req.body;
     console.log('Received data: ', { userId, titleId, ratingValue });
     // Try to find the existing rating first
-    const existingRating = yield Rating.findOne({ userId, titleId });
+    const existingRating = await ratingModel_1.default.findOne({ userId, titleId });
     // Find and update the existing rating, or create a new one if not found
-    const rating = yield Rating.findOneAndUpdate({ userId: userId, titleId: titleId }, // First object with the fields to identify the document
+    const rating = await ratingModel_1.default.findOneAndUpdate({ userId: userId, titleId: titleId }, // First object with the fields to identify the document
     { rating: ratingValue }, // Second object with the field to be updated and its new value
     { new: true, runValidators: true, upsert: true });
     // Determine whether the document was created or updated
@@ -64,11 +60,11 @@ exports.createRating = catchAsync((req, res, next) => __awaiter(void 0, void 0, 
             : 'Rating updated successfully',
         ratingObject: rating,
     });
-}));
+});
 // DELETE RATING
-exports.deleteRating = catchAsync((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.deleteRating = (0, catchAsync_1.default)(async (req, res, next) => {
     const { userId, titleId } = req.params;
-    const rating = yield Rating.findOneAndDelete({ userId, titleId });
+    const rating = await ratingModel_1.default.findOneAndDelete({ userId, titleId });
     if (!rating) {
         return res.status(404).json({
             status: 'fail',
@@ -76,4 +72,4 @@ exports.deleteRating = catchAsync((req, res, next) => __awaiter(void 0, void 0, 
         });
     }
     res.status(204).send();
-}));
+});
