@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import Title from '../models/titleModel';
-import catchAsync from '../utils/catchAsync';
-import AppError from '../utils/appError';
+import Title from '../models/titleModel.js';
+import catchAsync from '../utils/catchAsync.js';
+import AppError from '../utils/appError.js';
 import { Types } from 'mongoose';
 
 export const getAllTitles = catchAsync(

@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import User from '../models/userModel';
-import List from '../models/listModel';
-import AppError from '../utils/appError';
-import catchAsync from '../utils/catchAsync';
+import User from '../models/userModel.js';
+import List from '../models/listModel.js';
+import AppError from '../utils/appError.js';
+import catchAsync from '../utils/catchAsync.js';
 import { Types } from 'mongoose';
 
 export const getAllLists = catchAsync(
@@ -67,12 +67,14 @@ export const createList = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, titles, userId } = req.body;
 
+    // Create the list
     const newList = await List.create({
       name,
       titles,
       userId,
     });
 
+    // Update the user's lists
     await User.findOneAndUpdate(
       { userId },
       { $push: { lists: newList._id } },
@@ -88,16 +90,26 @@ export const createList = catchAsync(
   },
 );
 
+// DELETE LIST
+export const deleteList = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { listId } = req.params;
+
+    await List.deleteOne({ _id: listId });
+    return res.status(204).send();
+  },
+);
+
 // ADD ITEM TO LIST
 export const addToList = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { titleId, listId } = req.params;
-
     const list = await List.findOne({ _id: listId });
 
     if (!list) return next(new AppError('List not found', 404));
 
     await List.updateOne({ _id: listId }, { $push: { titles: titleId } });
+
     return res.status(200).json({
       status: 'success',
       message: 'Item added to list',

@@ -6,7 +6,8 @@ import {
   addToList,
   removeFromList,
   getAllLists,
-} from '../controllers/listController';
+  deleteList,
+} from '../controllers/listController.js';
 
 const router = express.Router();
 
@@ -21,6 +22,9 @@ router.route('/:userId').get(getListById);
 
 // Create list
 router.route('/create-list').post(createList);
+
+// Delete list
+router.route('/delete-list/:listId').delete(deleteList);
 
 // Add to list
 router.route('/:listId/add-to-list/:titleId').patch(addToList);

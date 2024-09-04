@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import Rating from '../models/ratingModel';
-import catchAsync from '../utils/catchAsync';
-import AppError from '../utils/appError';
+import Rating from '../models/ratingModel.js';
+import catchAsync from '../utils/catchAsync.js';
+import AppError from '../utils/appError.js';
 
 // GET RATING
 export const getRating = catchAsync(

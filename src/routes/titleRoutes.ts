@@ -6,7 +6,7 @@ import {
   updateTitle,
   createTitle,
   deleteTitle,
-} from '../controllers/titleController';
+} from '../controllers/titleController.js';
 
 const router = express.Router();
 
