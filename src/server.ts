@@ -21,14 +21,8 @@ if (!DB) {
 }
 
 mongoose.connect(DB).then(() => console.log('DB connected successfully'));
-<<<<<<< HEAD:server.ts
-
-const server = app.listen(3000, () => {
-  console.log(`App running on port 3000`);
-=======
 const server = app.listen(port, () => {
   console.log(`App running on PORT ${port}`);
->>>>>>> 3e1f1f61973fe30b368c1cdf7ec9e145e099316e:src/server.ts
 });
 
 // Listening to the unhandled rejection event
