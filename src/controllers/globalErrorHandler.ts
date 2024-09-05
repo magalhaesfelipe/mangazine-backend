@@ -18,12 +18,13 @@ const handleDuplicateFieldsDB = (err: any) => {
 // HANDLE DB VALIDATION ERROR
 const handleValidationErrorDB = (err: any) => {
   const errors = Object.values(err.errors).map((el: any) => el.message);
-
+  
   const message = `Invalid input data. ${errors.join('. ')}`;
-
+  
   return new AppError(message, 400);
 };
 
+// DEVELOPMENT
 const sendErrorDev = (err: any, res: Response) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -33,20 +34,19 @@ const sendErrorDev = (err: any, res: Response) => {
   });
 };
 
+// PRODUCTION
 const sendErrorProd = (err: any, res: Response) => {
-  // Operational, trusted error: send message to client
+  // Operational error, trusted error that we created: send message to client
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
     });
 
-    // Programming  or other unknown error: don't leak error details
+    // Programming  or other unknown error(generic message)
   } else {
-    // 1) Log error
     console.error('ERROR 💥', err);
 
-    // 2) Send generic message
     res.status(500).json({
       status: 'error',
       message: 'Something went wrong!',
@@ -61,11 +61,10 @@ export const globalErrorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  err.statusCode = err.statusCode || 500; // If statusCode is not defined, it will be 500
-  err.status = err.status || 'error'; // If the error status is not defined, it will be 'error'
+  err.statusCode = err.statusCode || 500; // If statusCode is not defined the default is 500
+  err.status = err.status || 'error'; // If the error status is not defined the default is 'error'
 
   if (process.env.NODE_ENV === 'development') {
-    // If the environment is development, we want to send more detail in the response
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
@@ -83,3 +82,5 @@ export const globalErrorHandler = (
     sendErrorProd(error, res);
   }
 };
+
+export default globalErrorHandler;
