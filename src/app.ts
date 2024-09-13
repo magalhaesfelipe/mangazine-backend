@@ -2,6 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import morgan from 'morgan'; // Middleware for logging HTTP requests
 import cors from 'cors'; // Middleware to handle cross-origin HTTP requests
+import rateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
 
 import AppError from './utils/appError.js';
 import { globalErrorHandler } from './controllers/errorController.js';
@@ -16,30 +18,46 @@ mongoose.set('strictQuery', false);
 
 // MIDDLEWARES
 
-// Middleware to enable CORS
-app.use(cors());
+// SPECIFY WHICH ORIGIN IS ALLOWED TO MAKE REQUESTS(cross-origin) AND WITH WHICH HTTP METHODS
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : '*',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  }),
+);
 
-/* app.use(cors({
-  origin: 'https://thefrontendapp.com', // Allow requests only from this domain
-  methods: ['GET', 'POST'], // Allow specific HTTP methods
-})) */
+// DEVELOPMENT LOGGING
+app.use(morgan('dev')); // 'dev' defines the log format
 
-app.use(morgan('dev')); // 'dev' defines the log format, there are other formats like 'tiny' or 'combined'
-app.use(express.json());
+// LIMIT REQUESTS A CLIENT CAN MAKE (based on their IP)
+const limiter = rateLimit({
+  max: 100, // max 100 requests
+  windowMs: 60 * 60 * 1000, // time window of 1 hour
+  message: 'Too many requests from this IP, please try again in 1 hour.',
+});
+app.use('/', limiter);
+
+// BODY PARSER, reading data from body into 'req.body'
+app.use(express.json({ limit: '10kb' }));
+
+// DATA SANITIZATION AGAINST NOSQL QUERY INJECTIONS
+app.use(mongoSanitize());
 
 // ROUTES
-app.use('/test', (req, res) => res.send('Express on Vercel'));
-app.use('/titles', titleRouter);
-app.use('/user', userRouter);
-app.use('/rating', ratingRouter);
-app.use('/lists', listRouter);
-app.use('/readlist', listRouter);
+app.use('/api/test', (req, res) => res.send('Express on Vercel'));
+app.use('/api/titles', titleRouter);
+app.use('/api/user', userRouter);
+app.use('/api/rating', ratingRouter);
+app.use('/api/lists', listRouter);
+app.use('/api/readlist', listRouter);
 
-// needs to be the last part after all the other routes
+// CATCH ALL UNDEFINED ROUTES
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
 });
 
+// GLOBAL ERROR HANDLER
 app.use(globalErrorHandler);
 
 export default app;

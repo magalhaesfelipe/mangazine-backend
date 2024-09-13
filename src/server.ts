@@ -2,15 +2,15 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import app from './app.js';
 
-// Listening and Catching Uncaught Exceptions
+// Error handler
 process.on('uncaughtException', (err) => {
-  console.log('UNCAUGHT EXCEPTION!😭 Shutting down...');
-  console.log(err.name, err.message);
+  const msg = `UNCAUGHTEXCEPTION📢! Shutting down... ${err.name}, ${err.message}.`;
+  console.log(msg);
   process.exit(1);
 });
 
-dotenv.config({ path: './config.env' });
-
+// Application code
+dotenv.config();
 const DB = process.env.DATABASE;
 const port = process.env.PORT || 5000;
 
@@ -20,16 +20,19 @@ if (!DB) {
   );
 }
 
+// Connect to database
 mongoose.connect(DB).then(() => console.log('DB connected successfully'));
+
+// Start server
 const server = app.listen(port, () => {
-  console.log(`App running on PORT ${port}`);
+  console.log(`🟢 App running on PORT ${port}`);
 });
 
-// Listening to the unhandled rejection event
+// Handling unhandled promise rejections
 process.on('unhandledRejection', (err: any) => {
-  console.log(err.name, err.message);
-  console.log('UNHANDLED REJECTION!😭 Shutting down...');
-  // By using server.close() we give the server time to finish all the request that are still pending or being handled at the time and then the server is killed
+  console.log(
+    `UNHANDLED REJECTION📢! Shutting down. ${err.name}, ${err.message}.`,
+  );
   server.close(() => {
     process.exit(1); // 0 stands for success, 1 stands for uncaught exception
   });
