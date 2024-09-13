@@ -6,7 +6,7 @@ import rateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 
 import AppError from './utils/appError.js';
-import { globalErrorHandler } from './controllers/errorController.js';
+import { globalErrorHandler } from './controllers/globalErrorHandler.js';
 
 import titleRouter from './routes/titleRoutes.js';
 import userRouter from './routes/userRoutes.js';
@@ -57,6 +57,7 @@ app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
 });
 
+// GLOBAL ERROR HANDLER
 // GLOBAL ERROR HANDLER
 app.use(globalErrorHandler);
 
