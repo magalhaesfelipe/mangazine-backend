@@ -33,7 +33,8 @@ This is the backend of our platform. The project follows the MVC architecture pa
 
 <br>
 
-## Clone the repository
+## Installation
+### Clone the repository
 
 ```
 git clone https://github.com/lopesmfelipe/mangazine-backend.git
@@ -43,15 +44,20 @@ git clone https://github.com/lopesmfelipe/mangazine-backend.git
 cd yourproject
 ```
 
-## Install dependencies
+### Install dependencies
 
 ```
 npm install
 ```
 
+<br>
+
+
 ## Run MongoDB
 
 Ensure MongoDB is running locally or provide a MongoDB Atlas connection URL in your environment variables.
+
+<br>
 
 ## Project Structure
 
@@ -128,10 +134,8 @@ This will start the application using node.
 
 `http://localhost:5000/api/`
 
-<br>
 
 ### Endpoints
-<br>
 
 > #### *User Routes*
 
