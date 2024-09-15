@@ -1,17 +1,18 @@
 # MANGAZINE BACKEND
 
 ## Overview
+<br>
 
  Mangazine is a source for Storytelling content. It's a web platform where users can discover and keep track of everything they want to read. We cover a wide range of content, such as mangas, comics, books, manhwa, magazines, etc. 
  Users can check information about what they are reading, rate titles, add titles they want to read to their 'readlist', create their own lists and we still have a lot of features coming in. At Mangazine, our goal is to be a comprehensive source of information, share amazing Storytelling works from diverse authors around the world, and connect people through culture.
 
 
-
  This is the backend of our platform. The project follows the MVC architecture pattern and uses MongoDB as the database.
 
----
+<br>
 
 ## Table of Contents
+
 1. [Installation](#installation)
 2. [Project Structure](#project-structure)
 3. [Environment Variables](#environment-variables)
@@ -21,32 +22,34 @@
 7. [Contributing](#contributing)
 8. [License](#license)
 
----
+<br>
 
-### Prerequisites
-Ensure you have the following installed:
+## Prerequisites
+> Ensure you have the following installed:
 - [Node.js](https://nodejs.org/)
 - [MongoDB](https://www.mongodb.com/)
 
-### Clone the repository
+<br>
+
+## Clone the repository
  ```
-git clone https://github.com/yourusername/yourproject.git
+git clone https://github.com/lopesmfelipe/mangazine-backend.git
 ```
 ```
 cd yourproject
 ```
 
-### Install dependencies
+## Install dependencies
 ```
 npm install
 ```
 
-### Run MongoDB
+## Run MongoDB
 
 Ensure MongoDB is running locally or provide a MongoDB Atlas connection URL in your environment variables.
 
 
-### Project Structure
+## Project Structure
 
 ```
 ├── src/                # Source code for the application
@@ -66,35 +69,50 @@ Ensure MongoDB is running locally or provide a MongoDB Atlas connection URL in y
 ```
 
 
-### Environment Variables
+## Environment Variables
 
 > Create a .env file in the root directory and add the following variables:
 
+Environment
+```
+NODE_ENV=development
+```
+
 Server
-```PORT=5000 ```
+```
+PORT=5000
+```
 
 Database
 ```
-MONGO_URI=mongodb://localhost:27017/your-db-name
+DATABASE=mongodb://localhost:27017/your-db-name
 ```
 
+Client Url
+```
+http://localhost:5173/
+```
 
-### Available Scripts
+<br>
 
-Running the application in development
+## Available Scripts
 
-npm run dev
+> #### Running the application in development
+
+``` 
+npm run start:dev
+```
 
 This will start the application using nodemon for hot-reloading.
 
-Running the application in production
+> #### Running the application in production
+``` 
 npm start
+ ```
 
-Linting and formatting code
-npm run lint
+This will start the application using node.
 
-Testing (optional)
-npm test
+<br>
 
 
 ## API Documentation
@@ -118,7 +136,7 @@ Add more routes as required.
 
 ## Database Schema
 
-### User Model
+ > ### User Model
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
@@ -127,7 +145,9 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ['user', 'admin'], default: 'user' }
 });
 
-### Title Model
+<br>
+
+> ### Title Model
 
 const titleSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -136,6 +156,7 @@ const titleSchema = new mongoose.Schema({
   rating: { type: Number, default: 0 }
 });
 
+<br>
 
 ## Contributing
 
@@ -145,7 +166,8 @@ const titleSchema = new mongoose.Schema({
 4. Push to the branch: git push origin my-new-feature
 5. Submit a pull request
 
+<br>
 
-### License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
