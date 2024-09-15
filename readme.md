@@ -29,13 +29,17 @@ Ensure you have the following installed:
 - [MongoDB](https://www.mongodb.com/)
 
 ### Clone the repository
-```bash
+ ```
 git clone https://github.com/yourusername/yourproject.git
+```
+```
 cd yourproject
+```
 
 ### Install dependencies
-
+```
 npm install
+```
 
 ### Run MongoDB
 
@@ -43,31 +47,37 @@ Ensure MongoDB is running locally or provide a MongoDB Atlas connection URL in y
 
 
 ### Project Structure
-.
-├── controllers/    # Handles incoming requests and responses
-├── models/         # MongoDB schemas and business logic
-├── routes/         # Route definitions for handling requests
-├── views/          # Front-end views (for applications using templates)
-├── middlewares/    # Custom middlewares
-├── config/         # Database and environment configuration
-├── public/         # Static assets (images, CSS, JS)
-├── app.js          # Main application file
-├── server.js       # Server setup and startup
-└── package.json    # Project metadata and scripts
+
+```
+├── src/                # Source code for the application
+│   ├── controllers/    # Handles incoming requests and responses
+│   ├── models/         # MongoDB schemas and business logic
+│   ├── routes/         # Route definitions for handling requests
+│   ├── utils/          # Utility functions and helpers
+│   ├── app.ts          # Main application file
+│   └── server.ts       # Server setup and startup
+├── .env                # Environment variables and database configuration
+├── dist/               # Compiled JavaScript files
+├── package.json        # Project metadata and scripts
+├── tsconfig.json       # TypeScript configuration file
+├── README.md           # Project overview and instructions
+├── LICENSE             # License for the project
+
+```
 
 
 ### Environment Variables
 
-Create a .env file in the root directory and add the following variables:
+> Create a .env file in the root directory and add the following variables:
 
 Server
-PORT=5000
+```PORT=5000 ```
 
 Database
+```
 MONGO_URI=mongodb://localhost:27017/your-db-name
+```
 
-JWT Secret (if using authentication)
-JWT_SECRET=your_secret_key
 
 ### Available Scripts
 
