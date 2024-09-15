@@ -10,10 +10,9 @@ import {
 
 const router = express.Router();
 
-router.route('/').get(getAllTitles);
+router.route('/get-all-titles').get(getAllTitles);
 router.route('/search/:titleName').get(getTitlesByName);
 router.route('/:titleId').get(getTitleById);
-
 router.route('/update-title/:titleId').patch(updateTitle);
 router.route('/create-title').post(createTitle);
 router.route('/delete/:titleId').delete(deleteTitle);

@@ -45,12 +45,10 @@ app.use(express.json({ limit: '10kb' }));
 app.use(mongoSanitize());
 
 // ROUTES
-app.use('/api/test', (req, res) => res.send('Express on Vercel'));
-app.use('/api/titles', titleRouter);
 app.use('/api/user', userRouter);
-app.use('/api/rating', ratingRouter);
+app.use('/api/titles', titleRouter);
 app.use('/api/lists', listRouter);
-app.use('/api/readlist', listRouter);
+app.use('/api/rating', ratingRouter);
 
 // CATCH ALL UNDEFINED ROUTES
 app.all('*', (req, res, next) => {

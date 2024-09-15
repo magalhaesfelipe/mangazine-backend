@@ -14,9 +14,10 @@ const router = express.Router();
 
 /* router.route('/').get(userController.getAllUsers); */
 
+// Register user
 router.route('/signup').post(createUser);
 
-// Check user exists
+// Check if user exists
 router.route('/exists/:userId').get(checkUserExists);
 
 // Get user role
@@ -33,12 +34,12 @@ router
 // Add item to the readlist
 router.route('/readlist/:userId/add-to-readlist/:titleId').patch(addToReadlist);
 
-// Remove item from the readlist
+// Remove item from readlist
 router
   .route('/readlist/:userId/remove-from-readlist/:titleId')
   .delete(removeFromReadlist);
 
-// Get lists
+// Get user lists
 router.route('/lists/:userId').get(getLists);
 
 export default router;

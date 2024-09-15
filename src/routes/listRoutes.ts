@@ -17,8 +17,8 @@ router.route('/:listId/titles/:titleId/exists').get(checkTitleExists);
 // Get all lists
 router.route('/get-all-lists/:userId').get(getAllLists);
 
-// Get lists by ID
-router.route('/:userId').get(getListById);
+// Get list by ID
+router.route('/get-list/:listId').get(getListById);
 
 // Create list
 router.route('/create-list').post(createList);
