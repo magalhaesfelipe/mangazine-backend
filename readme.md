@@ -1,5 +1,7 @@
 # MANGAZINE BACKEND
 
+Discord server: https://discord.gg/eZQ83wzQ
+
 ## Overview
 
 <br>
