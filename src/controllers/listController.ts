@@ -23,9 +23,9 @@ export const getAllLists = catchAsync(
 // GET LIST BY ID
 export const getListById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { userId } = req.params;
+    const { listId } = req.params;
 
-    const list = await List.findById(userId).populate('titles');
+    const list = await List.findById(listId).populate('titles');
     if (!list) {
       return next(new AppError('List not found', 404));
     }
