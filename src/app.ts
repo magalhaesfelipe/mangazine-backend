@@ -32,7 +32,7 @@ app.use(morgan('dev')); // 'dev' defines the log format
 
 // LIMIT REQUESTS A CLIENT CAN MAKE (based on their IP)
 const limiter = rateLimit({
-  max: 100, // max 100 requests
+  max: 10000, // max 100 requests
   windowMs: 60 * 60 * 1000, // time window of 1 hour
   message: 'Too many requests from this IP, please try again in 1 hour.',
 });
