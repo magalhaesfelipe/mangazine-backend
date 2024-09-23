@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import Title from '../models/titleModel.js';
+import Manga from '../models/mangaModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
 import { Types } from 'mongoose';
 
-export const getAllTitles = catchAsync(
+export const getAllMangas = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // BUILD THE QUERY
 
@@ -17,7 +17,7 @@ export const getAllTitles = catchAsync(
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    let query = Title.find(JSON.parse(queryStr)); // temporary final query
+    let query = Manga.find(JSON.parse(queryStr)); // temporary final query
 
     // 2) SORTING
     if (typeof req.query.sort === 'string') {
@@ -38,91 +38,86 @@ export const getAllTitles = catchAsync(
     }
 
     // EXECUTE THE QUERY
-    const titles = await query;
+    const mangas = await query;
 
     res.status(200).json({
       status: 'success',
-      result: titles.length,
-      data: {
-        titles,
-      },
+      result: mangas.length,
+      mangas,
     });
   },
 );
 
-// GET TITLE BY ID
-export const getTitleById = catchAsync(
+// GET MANGA BY ID
+export const getMangaById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const title = await Title.findById(req.params.titleId);
+    const manga = await Manga.findById(req.params.mangaId);
 
-    if (!title) {
-      return next(new AppError('No title found with that ID', 404));
+    if (!manga) {
+      return next(new AppError('No manga found with that ID', 404));
     }
 
     res.status(200).json({
       status: 'success',
-      title,
+      manga,
     });
   },
 );
 
-// GET TITLE BY NAME
-export const getTitlesByName = catchAsync(
+// GET MANGA BY NAME
+export const getMangaByName = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { titleName } = req.params; // Get the query parameter from the URL
-    if (typeof titleName === 'string') {
-      const titles = await Title.find({ name: new RegExp(titleName, 'i') }); // Perform case-insensitive search
+    const { mangaName } = req.params; // Get the query parameter from the URL
+    if (typeof mangaName === 'string') {
+      const mangas = await Manga.find({ name: new RegExp(mangaName, 'i') }); // Perform case-insensitive search
 
-      if (titles.length === 0) {
-        return next(new AppError('No title found with that name', 404));
+      if (mangas.length === 0) {
+        return next(new AppError('No mangas found with that name', 404));
       }
 
       res.status(200).json({
         status: 'success',
-        message: `${titles.length} items found.`,
-        titles,
+        message: `${mangas.length} items found.`,
+        mangas,
       });
     }
   },
 );
 
-// CREATE TITLE      This entire async fn is passed as parameter to catchAsync
-export const createTitle = catchAsync(
+// CREATE MANGA      This entire async fn is passed as parameter to catchAsync
+export const createManga = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const newTitle = await Title.create(req.body);
+    const newManga = await Manga.create(req.body);
+
     res.status(201).json({
-      status: 'Success',
-      data: {
-        title: newTitle,
-      },
+      status: 'success',
+      newManga,
     });
   },
 );
 
-// UPDATE TITLE
-export const updateTitle = catchAsync(
+// UPDATE MANGA
+export const updateManga = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { titleId } = req.params;
+    const { mangaId } = req.params;
 
     const updates = req.body;
 
-    const title = await Title.findOneAndUpdate({ _id: titleId }, updates, {
+    const manga = await Manga.findOneAndUpdate({ _id: mangaId }, updates, {
       new: true, // Return the updated document
       runValidators: true,
     });
 
     res.status(200).json({
       status: 'success',
-      message: 'Title updated succesfully',
-      data: {
-        title,
-      },
+      message: 'Manga updated succesfully',
+      manga,
     });
   },
 );
 
-// DELETE TITLE
-export const deleteTitle = catchAsync(
+// DELETE MANGA
+export const deleteManga = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // Validate the ID
     const { id } = req.params;
@@ -130,17 +125,12 @@ export const deleteTitle = catchAsync(
       return next(new AppError('Invalid ID format', 400));
     }
 
-    const title = await Title.findOneAndDelete({ _id: id });
+    const manga = await Manga.findOneAndDelete({ _id: id });
 
-    if (!title) {
-      return next(
-        new AppError('No title found with that with that id to delete', 404),
-      );
+    if (!manga) {
+      return next(new AppError('No manga found with that id to delete', 404));
     }
 
-    res.status(204).json({
-      status: 'success',
-      data: null,
-    });
+    res.status(204).send();
   },
 );

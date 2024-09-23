@@ -1,14 +1,20 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
+
 
 const listSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    titles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Title' }], // Array of strings representing titles
-    userId: { type: String, required: true }, // Store Clerk user ID
+    userId: { type: String, required: true },
+    items: [{ type: mongoose.Schema.Types.ObjectId, refPath: 'itemsModel' }],
+    itemsModel: [
+      {
+        type: String,
+        required: true,
+        enum: ['Manga', 'Book'],
+      },
+    ],
   },
   { timestamps: true },
 );
 
-const List = mongoose.model('List', listSchema);
-
-export default List;
+export const List = mongoose.model('List', listSchema);

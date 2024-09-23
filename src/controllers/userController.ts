@@ -3,6 +3,7 @@ import User from '../models/userModel.js';
 import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
 import { Types } from 'mongoose';
+import List from '../models/listModel.js';
 
 // CHECK IF USER EXISTS
 export const checkUserExists = catchAsync(
@@ -34,17 +35,26 @@ export const getUserRole = catchAsync(
 // CREATE USER
 export const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { userName, email, userId } = req.body;
+    const { name, email, userId } = req.body;
 
+    // Create the default readlist for the user
+    const readList = await List.create({
+      userId: userId,
+      name: 'Readlist',
+    });
+
+    // Create the new user with the default readlist
     const newUser = await User.create({
-      userName,
+      name,
       email,
       userId,
+      readList: readList._id,
     });
     res.status(201).json({
       status: 'success',
       data: {
-        list: newUser,
+        userName: newUser.name,
+        email: newUser.email,
       },
     });
   },

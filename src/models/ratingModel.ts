@@ -12,6 +12,16 @@ const ratingSchema = new mongoose.Schema(
       ref: 'Title',
       required: true,
     },
+    item: {
+      type: mongoose.Schema.ObjectId,
+      refPath: 'itemModel',
+      required: true,
+    },
+    itemModel: {
+      type: String,
+      required: true,
+      enum: ['Manga', 'Book'],
+    },
     rating: {
       type: Number,
       required: true,

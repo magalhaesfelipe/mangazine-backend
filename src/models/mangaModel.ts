@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 // Define an interface for the Title document
-interface ITitle extends Document {
+interface IManga extends Document {
   name: string;
   author?: string;
   releaseYear?: string;
@@ -14,10 +14,10 @@ interface ITitle extends Document {
   status?: string;
   type?: string;
   demographic?: string;
-  alternateName?: string;
+  alternativeName?: string;
 }
 
-const titleSchema = new Schema<ITitle>({
+const mangaSchema = new Schema<IManga>({
   name: {
     type: String,
     required: [true, 'A title must have a name'],
@@ -40,12 +40,12 @@ const titleSchema = new Schema<ITitle>({
   cover: { type: String },
   otherCovers: [{ type: String }],
   status: { type: String },
-  type: { type: String },
+  type: { type: String, default: 'manga' },
   demographic: { type: String },
-  alternateName: { type: String },
+  alternativeName: { type: String },
 });
 
 // Create the model with the Title interface
-const Title = mongoose.model<ITitle>('Title', titleSchema);
+const Manga = mongoose.model<IManga>('Manga', mangaSchema);
 
-export default Title;
+export default Manga;

@@ -8,10 +8,11 @@ import mongoSanitize from 'express-mongo-sanitize';
 import AppError from './utils/appError.js';
 import { globalErrorHandler } from './controllers/globalErrorHandler.js';
 
-import titleRouter from './routes/titleRoutes.js';
+import mangaRouter from './routes/mangaRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import ratingRouter from './routes/ratingRoutes.js';
 import listRouter from './routes/listRoutes.js';
+import bookRouter from './routes/bookRoutes.js';
 
 const app = express();
 mongoose.set('strictQuery', false);
@@ -46,9 +47,10 @@ app.use(mongoSanitize());
 
 // ROUTES
 app.use('/api/user', userRouter);
-app.use('/api/titles', titleRouter);
-app.use('/api/lists', listRouter);
+app.use('/api/manga', mangaRouter);
+app.use('/api/list', listRouter);
 app.use('/api/rating', ratingRouter);
+app.use('/api/book', bookRouter);
 
 // CATCH ALL UNDEFINED ROUTES
 app.all('*', (req, res, next) => {
