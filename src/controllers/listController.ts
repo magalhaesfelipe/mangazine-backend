@@ -1,40 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import User from '../models/userModel.js';
-import { List }  from '../models/listModel.js';
+import { List } from '../models/listModel.js';
 import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
 import { Types } from 'mongoose';
-
-// CHECK IF ITEM EXISTS IN READLIST
-export const checkItemExists = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { userId, itemId } = req.params;
-
-    // Validate and convert itemId to ObjectId
-    let itemObjectId: Types.ObjectId;
-    try {
-      itemObjectId = new Types.ObjectId(itemId);
-    } catch (error) {
-      return next(new AppError('Invalid item ID format', 400));
-    }
-
-    // Find the user by userId and populate the readList
-    const user = await User.findOne({ userId }).populate('readList').lean();
-
-    if (!user || !user.readList) {
-      return next(new AppError('User or Readlist not found', 404));
-    }
-
-    const readList = user.readList;
-
-    // Check if the item exists in the user's readList
-    const itemExists = readList.items && readList.items.some((item: Types.ObjectId) =>
-      item.equals(itemObjectId),  
-    );
-
-    return res.status(200).json({ exists: itemExists });
-  },
-);
 
 // GET ALL LISTS
 export const getAllLists = catchAsync(
@@ -69,7 +38,7 @@ export const getListById = catchAsync(
   },
 );
 
-// CHECK IF TITLE EXISTS IN THE LIST
+// CHECK IF ITEM EXISTS IN THE LIST
 export const checkTitleExists = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { listId, titleId } = req.params;

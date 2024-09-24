@@ -60,6 +60,8 @@ export const createUser = catchAsync(
   },
 );
 
+
+
 // GET READLIST
 export const getReadlist = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -86,13 +88,13 @@ export const getReadlist = catchAsync(
 // CHECK IF ITEM EXISTS IN THE READLIST
 export const checkItemExists = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { userId, titleId } = req.params;
+    const { userId, itemId } = req.params;
 
     // Validate and convert titleId to ObjectId
-    let titleObjectId: Types.ObjectId;
+    let itemObjectId: Types.ObjectId;
 
     try {
-      titleObjectId = new Types.ObjectId(titleId); // Validate
+      itemObjectId = new Types.ObjectId(itemId); // Validate
     } catch (error) {
       return next(new AppError('Invalid title ID format', 400));
     }
@@ -103,7 +105,7 @@ export const checkItemExists = catchAsync(
       return next(new AppError('User not found', 404));
     }
 
-    if (user.readList.includes(titleId as any)) {
+    if (user.readList.includes(itemId as any)) {
       return res.status(200).json({ exists: true });
     }
 
