@@ -1,6 +1,5 @@
 import express from 'express';
 import {
-  getAllBooks,
   getBookById,
   getBookByName,
   updateBook,
@@ -10,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.route('/get-all-books').get(getAllBooks);
+// router.route('/get-all-books').get(getAllBooks);
 router.route('/:bookId').get(getBookById);
 router.route('/search/:bookName').get(getBookByName);
 router.route('/update-book/:bookId').patch(updateBook);

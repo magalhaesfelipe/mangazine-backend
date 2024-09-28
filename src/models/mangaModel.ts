@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-// Define an interface for the Title document
+// Define an interface for the Manga document
 interface IManga extends Document {
   name: string;
   author?: string;
@@ -20,7 +20,7 @@ interface IManga extends Document {
 const mangaSchema = new Schema<IManga>({
   name: {
     type: String,
-    required: [true, 'A title must have a name'],
+    required: [true, 'A Manga must have a name'],
     unique: true,
     trim: true, // Removes whitespace from the beginning and end of the string
     validate: {
@@ -28,7 +28,7 @@ const mangaSchema = new Schema<IManga>({
         // Ensure the value is not an empty string
         return !!(value && value.trim().length > 0);
       },
-      message: 'A title name cannot be empty',
+      message: 'A Manga name cannot be empty',
     },
   },
   author: { type: String },
@@ -45,7 +45,7 @@ const mangaSchema = new Schema<IManga>({
   alternativeName: { type: String },
 });
 
-// Create the model with the Title interface
+// Create the model with the Manga interface
 const Manga = mongoose.model<IManga>('Manga', mangaSchema);
 
 export default Manga;

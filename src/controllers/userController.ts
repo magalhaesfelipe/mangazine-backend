@@ -3,7 +3,7 @@ import User from '../models/userModel.js';
 import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
 import { Types } from 'mongoose';
-import List from '../models/listModel.js';
+import { List } from '../models/listModel.js';
 
 // CHECK IF USER EXISTS
 export const checkUserExists = catchAsync(
@@ -59,8 +59,6 @@ export const createUser = catchAsync(
     });
   },
 );
-
-
 
 // GET READLIST
 export const getReadlist = catchAsync(
