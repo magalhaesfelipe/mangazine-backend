@@ -120,12 +120,12 @@ export const updateManga = catchAsync(
 export const deleteManga = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // Validate the ID
-    const { id } = req.params;
-    if (!Types.ObjectId.isValid(id)) {
+    const { mangaId } = req.params;
+    if (!Types.ObjectId.isValid(mangaId)) {
       return next(new AppError('Invalid ID format', 400));
     }
 
-    const manga = await Manga.findOneAndDelete({ _id: id });
+    const manga = await Manga.findOneAndDelete({ _id: mangaId });
 
     if (!manga) {
       return next(new AppError('No manga found with that id to delete', 404));

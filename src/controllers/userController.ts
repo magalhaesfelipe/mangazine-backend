@@ -60,77 +60,6 @@ export const createUser = catchAsync(
   },
 );
 
-// GET READLIST
-export const getReadlist = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { userId } = req.params;
-    const user = await User.findOne({ userId }).populate({
-      path: 'readList',
-      select: 'name cover author releaseYear', // Selecting only the necessary fields
-    });
-
-    if (!user) {
-      return next(new AppError('User not found', 404));
-    }
-
-    const { readList } = user;
-    console.log('Fetched Readlist: ', readList);
-
-    res.status(200).json({
-      status: 'success',
-      readList,
-    });
-  },
-);
-
-// CHECK IF ITEM EXISTS IN THE READLIST
-export const checkItemExists = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { userId, itemId } = req.params;
-
-    // Validate and convert titleId to ObjectId
-    let itemObjectId: Types.ObjectId;
-
-    try {
-      itemObjectId = new Types.ObjectId(itemId); // Validate
-    } catch (error) {
-      return next(new AppError('Invalid title ID format', 400));
-    }
-
-    const user = await User.findOne({ userId: userId });
-
-    if (!user) {
-      return next(new AppError('User not found', 404));
-    }
-
-    if (user.readList.includes(itemId as any)) {
-      return res.status(200).json({ exists: true });
-    }
-
-    return res.status(200).json({ exists: false });
-  },
-);
-
-// ADD ITEM TO THE READLIST
-export const addToReadlist = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { userId, titleId } = req.params;
-    const user = await User.findOne({ userId: userId });
-
-    if (!user) {
-      return next(new AppError('User not found', 404));
-    }
-
-    user.readList.push(titleId as any);
-    await user.save();
-
-    res.status(200).json({
-      message: 'Item added successfully',
-      readList: user.readList,
-    });
-  },
-);
-
 // REMOVE ITEM FROM THE READLIST
 export const removeFromReadlist = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -144,18 +73,6 @@ export const removeFromReadlist = catchAsync(
     if (result.matchedCount === 0) {
       return next(new AppError('User not found', 404));
     }
-
-    /* 
-    const user = await User.findOne({ userId: userId });
-
-    if (!user) {
-      return next(new AppError('User not found', 404));
-    }
-    // Filter out the titleId from the readList (alternative method)
-    user.readlist = user.readList.filter((id) => id.toString() !== titleId)
-    user.readList.pull(titleId);
-    await user.save();
-    */
 
     res.status(204).send();
   },
