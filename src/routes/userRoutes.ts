@@ -3,15 +3,10 @@ import {
   createUser,
   checkUserExists,
   getUserRole,
-  getReadlist,
-  checkItemExists,
-  addToReadlist,
-  removeFromReadlist,
   getLists,
 } from '../controllers/userController.js';
 
 const router = express.Router();
-
 /* router.route('/').get(userController.getAllUsers); */
 
 // Register user
@@ -22,22 +17,6 @@ router.route('/exists/:userId').get(checkUserExists);
 
 // Get user role
 router.route('/get-role/:userId').get(getUserRole);
-
-// Get readlist
-router.route('/readlist/:userId').get(getReadlist);
-
-// Check title exists in the readlist
-router
-  .route('/readlist/:userId/check-item-exists/:titleId')
-  .get(checkItemExists);
-
-// Add item to the readlist
-router.route('/readlist/:userId/add-to-readlist/:titleId').patch(addToReadlist);
-
-// Remove item from readlist
-router
-  .route('/readlist/:userId/remove-from-readlist/:titleId')
-  .delete(removeFromReadlist);
 
 // Get user lists
 router.route('/lists/:userId').get(getLists);

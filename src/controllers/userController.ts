@@ -4,6 +4,7 @@ import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
 import { Types } from 'mongoose';
 import { List } from '../models/listModel.js';
+import { createReadlist } from './readlistController.js';
 
 // CHECK IF USER EXISTS
 export const checkUserExists = catchAsync(
@@ -38,18 +39,15 @@ export const createUser = catchAsync(
     const { name, email, userId } = req.body;
 
     // Create the default readlist for the user
-    const readList = await List.create({
-      userId: userId,
-      name: 'Readlist',
-    });
+    const readlist = await createReadlist(userId);
 
     // Create the new user with the default readlist
     const newUser = await User.create({
       name,
       email,
       userId,
-      readList: readList._id,
     });
+
     res.status(201).json({
       status: 'success',
       data: {
@@ -57,24 +55,6 @@ export const createUser = catchAsync(
         email: newUser.email,
       },
     });
-  },
-);
-
-// REMOVE ITEM FROM THE READLIST
-export const removeFromReadlist = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { userId, titleId } = req.params;
-
-    const result = await User.updateOne(
-      { userId: userId },
-      { $pull: { readList: titleId } },
-    );
-
-    if (result.matchedCount === 0) {
-      return next(new AppError('User not found', 404));
-    }
-
-    res.status(204).send();
   },
 );
 

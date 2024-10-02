@@ -44,6 +44,15 @@ export const checkItemExistsInReadlist = catchAsync(
   },
 );
 
+// CREATE READLIST
+export const createReadlist = catchAsync(async (userId: any) => {
+  const readlist = await Readlist.create({
+    userId: userId,
+  });
+
+  return readlist;
+});
+
 // ADD ITEM TO THE READLIST
 export const addToReadlist = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

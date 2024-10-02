@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-  checkTitleExists,
+  checkItemExists,
   getListById,
   createList,
   addToList,
@@ -12,7 +12,7 @@ import {
 const router = express.Router();
 
 // Checks if item exists in the list
-router.route('/:listId/titles/:titleId/exists').get(checkTitleExists);
+router.route('/:listId/item/:itemId/exists').get(checkItemExists);
 
 // Get all lists
 router.route('/get-all-lists/:userId').get(getAllLists);
@@ -27,9 +27,9 @@ router.route('/create-list').post(createList);
 router.route('/delete-list/:listId').delete(deleteList);
 
 // Add to list
-router.route('/:listId/add-to-list/:titleId').patch(addToList);
+router.route('/:listId/add-to-list/:itemId').patch(addToList);
 
 // Remove from list
-router.route('/:listId/remove-from-list/:titleId').patch(removeFromList);
+router.route('/:listId/remove-from-list/:itemId').patch(removeFromList);
 
 export default router;

@@ -39,19 +39,19 @@ export const getListById = catchAsync(
 );
 
 // CHECK IF ITEM EXISTS IN THE LIST
-export const checkTitleExists = catchAsync(
+export const checkItemExists = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { listId, titleId } = req.params;
+    const { listId, itemId } = req.params;
 
     // Validate listId and titleId
-    if (!Types.ObjectId.isValid(listId) || !Types.ObjectId.isValid(titleId)) {
+    if (!Types.ObjectId.isValid(listId) || !Types.ObjectId.isValid(itemId)) {
       return next(new AppError('Invalid list or title ID format', 400));
     }
 
     // Using projection to check for the title's existence
     // and only passing the '_id' to the 'list' variable, instead of the full list document, with other fields like 'name'
     const list = await List.findOne(
-      { _id: listId, titles: titleId }, // Filter the List collection for a document with the  fields '_id' and 'titles' equal to the listId and titleId received in the params
+      { _id: listId, items: itemId }, // Filter the List collection for a document with the  fields '_id' and 'titles' equal to the listId and titleId received in the params
       { _id: 1 }, // Only fetch(projects/returns) the _id field, so we don't need to return the full document(heavier)
     );
 
@@ -66,12 +66,12 @@ export const checkTitleExists = catchAsync(
 // CREATE LIST
 export const createList = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, titles, userId } = req.body;
+    const { name, items, userId } = req.body;
 
     // Create the list
     const newList = await List.create({
       name,
-      titles,
+      items,
       userId,
     });
 
@@ -104,12 +104,12 @@ export const deleteList = catchAsync(
 // ADD ITEM TO LIST
 export const addToList = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { titleId, listId } = req.params;
+    const { itemId, listId } = req.params;
     const list = await List.findOne({ _id: listId });
 
     if (!list) return next(new AppError('List not found', 404));
 
-    await List.updateOne({ _id: listId }, { $push: { titles: titleId } });
+    await List.updateOne({ _id: listId }, { $push: { items: itemId } });
 
     return res.status(200).json({
       status: 'success',
@@ -122,13 +122,13 @@ export const addToList = catchAsync(
 // REMOVE ITEM FROM LIST
 export const removeFromList = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { titleId, listId } = req.params;
+    const { itemId, listId } = req.params;
 
     const list = await List.findOne({ _id: listId });
 
     if (!list) return next(new AppError('List not found', 404));
 
-    await List.updateOne({ _id: listId }, { $pull: { titles: titleId } });
+    await List.updateOne({ _id: listId }, { $pull: { items: itemId } });
 
     return res.status(200).json({
       status: 'success',
