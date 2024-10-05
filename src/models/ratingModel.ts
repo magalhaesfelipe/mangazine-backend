@@ -7,12 +7,7 @@ const ratingSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    titleId: {
-      type: String,
-      ref: 'Title',
-      required: true,
-    },
-    item: {
+    itemId: {
       type: mongoose.Schema.ObjectId,
       refPath: 'itemModel',
       required: true,
