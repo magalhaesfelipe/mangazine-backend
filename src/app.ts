@@ -13,6 +13,7 @@ import userRouter from './routes/userRoutes.js';
 import ratingRouter from './routes/ratingRoutes.js';
 import listRouter from './routes/listRoutes.js';
 import bookRouter from './routes/bookRoutes.js';
+import readlistRouter from './routes/readlistRoutes.js';
 
 const app = express();
 mongoose.set('strictQuery', false);
@@ -46,12 +47,13 @@ app.use(express.json({ limit: '10kb' }));
 app.use(mongoSanitize());
 
 // ROUTES
-app.use('/api/user', userRouter);
-app.use('/api/manga', mangaRouter);
-app.use('/api/list', listRouter);
-app.use('/api/rating', ratingRouter);
-app.use('/api/book', bookRouter);
-
+app.use('/api/users', userRouter);
+app.use('/api/mangas', mangaRouter);
+app.use('/api/lists', listRouter);
+app.use('/api/ratings', ratingRouter);
+app.use('/api/books', bookRouter);
+app.use('/api/readlists', readlistRouter);
+  
 // CATCH ALL UNDEFINED ROUTES
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));

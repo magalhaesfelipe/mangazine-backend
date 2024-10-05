@@ -67,9 +67,10 @@ export const getMangaById = catchAsync(
 // GET MANGA BY NAME
 export const getMangaByName = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { mangaName } = req.params; // Get the query parameter from the URL
-    if (typeof mangaName === 'string') {
-      const mangas = await Manga.find({ name: new RegExp(mangaName, 'i') }); // Perform case-insensitive search
+    const { name } = req.query; // Get the query parameter from the URL
+    
+    if (typeof name === 'string') {
+      const mangas = await Manga.find({ name: new RegExp(name, 'i') }); // Perform case-insensitive search
 
       if (mangas.length === 0) {
         return next(new AppError('No mangas found with that name', 404));

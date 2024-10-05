@@ -10,11 +10,14 @@ import {
 
 const router = express.Router();
 
-router.route('/get-all-mangas').get(getAllMangas);
-router.route('/:mangaId').get(getMangaById);
-router.route('/search/:mangaName').get(getMangaByName);
-router.route('/update-manga/:mangaId').patch(updateManga);
-router.route('/create-manga').post(createManga);
-router.route('/delete/:mangaId').delete(deleteManga);
+router.route('/').get(getAllMangas).post(createManga);
+router.route('/search').get(getMangaByName);
+
+router
+  .route('/:mangaId')
+  .get(getMangaById)
+  .patch(updateManga)
+  .delete(deleteManga);
+
 
 export default router;

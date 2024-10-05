@@ -20,6 +20,6 @@ const readlistSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const Readlist = mongoose.model('User', readlistSchema);
+const Readlist = mongoose.model('Readlist', readlistSchema);
 
 export default Readlist;
