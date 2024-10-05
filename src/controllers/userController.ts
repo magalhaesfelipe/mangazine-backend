@@ -7,7 +7,9 @@ import { createReadlist } from './readlistController.js';
 // GET USER BY ID INCLUDING THE ROLE FIELD
 export const getUserById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = await User.findById(req.params.userId).select('role');
+    const user = await User.findOne({ userId: req.params.userId }).select(
+      'role',
+    );
 
     if (!user) {
       return next(new AppError('User not found', 404));
@@ -44,28 +46,3 @@ export const createUser = catchAsync(
     });
   },
 );
-
-// GET LISTS
-export const getUserLists = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const { userId } = req.params;
-
-  const user = await User.findOne({ userId }).populate('lists');
-
-  if (!user) {
-    return next(new AppError('User not found', 404));
-  }
-
-  // Extract the lists from the user object
-  const { lists } = user;
-
-  // Return the lists
-  return res.status(200).json({
-    status: 'success',
-    result: lists.length,
-    data: { lists },
-  });
-};

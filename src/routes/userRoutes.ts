@@ -1,9 +1,6 @@
 import express from 'express';
-import {
-  createUser,
-  getUserById,
-  getUserLists,
-} from '../controllers/userController.js';
+import { createUser, getUserById } from '../controllers/userController.js';
+import { getAllLists } from '../controllers/listController.js';
 
 const router = express.Router();
 
@@ -14,6 +11,6 @@ router.route('/').post(createUser);
 router.route('/:userId').get(getUserById);
 
 // Get user lists
-router.route('/:userId/lists').get(getUserLists);
+router.route('/:userId/lists').get(getAllLists);
 
 export default router;
