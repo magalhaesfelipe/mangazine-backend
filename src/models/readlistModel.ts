@@ -12,7 +12,7 @@ const readlistSchema = new mongoose.Schema(
     itemsModel: [
       {
         type: String,
-        required: true,
+        required: true, 
         enum: ['Manga', 'Book'],
       },
     ],

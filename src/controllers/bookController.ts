@@ -23,9 +23,9 @@ export const getBookById = catchAsync(
 // GET BOOK BY NAME
 export const getBookByName = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { bookName } = req.params;
-    if (typeof bookName === 'string') {
-      const books = await Book.find({ name: new RegExp(bookName, 'i') });
+    const { name } = req.query;
+    if (typeof name === 'string') {
+      const books = await Book.find({ name: new RegExp(name, 'i') });
 
       if (books.length === 0) {
         return next(new AppError('No book found with that name', 404));

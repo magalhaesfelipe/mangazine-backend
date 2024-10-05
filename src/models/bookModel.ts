@@ -13,15 +13,17 @@ const bookSchema = new Schema({
       message: `The book's name cannot be empty`,
     },
   },
-  author: { type: mongoose.Schema.Types.ObjectId, ref: 'Book' },
+  authorName: { type: String },
   releaseYear: { type: String },
   description: { type: String },
   cover: { type: String },
   pages: { type: Number },
   genre: [{ type: String }],
+  publishedBy: { type: String },
   otherCovers: [{ type: String }],
-  type: { type: String, default: 'book' },
   alternativeName: { type: String },
+  type: { type: String, default: 'book' },
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },
 });
 
 const Book = mongoose.model('Book', bookSchema);
