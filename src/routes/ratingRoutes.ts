@@ -9,13 +9,13 @@ import {
 const router = express.Router();
 
 // Get a user's rating for a specific item
-router.route('user/:userId/item/:itemId').get(getRating);
+router.route('/user/:userId/item/:itemId').get(getRating);
 
 // Create or update rating
 router.route('/').post(createRating);
 
 // Delete a user's rating for a specific item
-router.route('user/:userId/item/:itemId').delete(deleteRating);
+router.route('/user/:userId/item/:itemId').delete(deleteRating);
 
 // Get average rating
 router.route('/:itemId/average').get(getAverageRating);

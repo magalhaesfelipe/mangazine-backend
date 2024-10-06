@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import Rating from '../models/ratingModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
+import mongoose from 'mongoose';
 
 // GET RATING
 export const getRating = catchAsync(
@@ -9,8 +10,8 @@ export const getRating = catchAsync(
     const { userId, itemId } = req.params;
 
     const userRating = await Rating.findOne({
-      userId: userId,
-      itemId: itemId,
+      userId,
+      itemId,
     });
 
     if (!userRating) {
@@ -22,7 +23,6 @@ export const getRating = catchAsync(
 
     res.status(200).json({
       status: 'success',
-      message: 'User data rating',
       userRating,
     });
   },
@@ -33,19 +33,16 @@ export const getAverageRating = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { itemId } = req.params;
 
-    const itemRatings = await Rating.aggregate([
-      { $match: { itemId: itemId } },
+    const objectIdItemId = new mongoose.Types.ObjectId(itemId);
+
+    const avgRating = await Rating.aggregate([
+      { $match: { itemId: objectIdItemId } },
       { $group: { _id: '$itemId', averageRating: { $avg: '$rating' } } },
     ]);
 
-    console.log('Title ratings: ', itemRatings);
-
-    const avgRating = itemRatings.length ? itemRatings[0].averageRating : 0;
-
     res.status(200).json({
       status: 'success',
-      message: 'OVERALL RATING: ',
-      averageRating: avgRating,
+      averageRating: avgRating.length > 0 ? avgRating[0] : 0,
     });
   },
 );
@@ -54,8 +51,6 @@ export const getAverageRating = catchAsync(
 export const createRating = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId, itemId, ratingValue } = req.body;
-
-    console.log('Received data: ', { userId, itemId, ratingValue });
 
     // Try to find the existing rating first
     const existingRating = await Rating.findOne({ userId, itemId });
@@ -69,8 +64,6 @@ export const createRating = catchAsync(
 
     // Determine whether the document was created or updated
     const wasCreated = !existingRating;
-
-    console.log(wasCreated);
 
     res.status(wasCreated ? 201 : 200).json({
       status: 'success',
@@ -92,7 +85,7 @@ export const deleteRating = catchAsync(
     if (!rating) {
       return res.status(404).json({
         status: 'fail',
-        message: 'No rating found with that userId or titleId',
+        message: 'No rating found with that userId or itemId',
       });
     }
 
