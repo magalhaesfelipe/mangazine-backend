@@ -20,19 +20,26 @@ const authorSchema = new Schema({
   dateOfBirth: {
     type: Date,
   },
-  Nationality: {
+  placeOfBirth: {
     type: String,
     trim: true,
   },
-  books: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Book',
-    },
-  ],
   photo: {
     type: String,
   },
+  works: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'worksModel',
+    },
+  ],
+  worksModel: [
+    {
+      type: String,
+      required: true,
+      enum: ['Manga', 'Book'],
+    },
+  ],
   otherPhotos: [{ type: String }],
 });
 

@@ -104,7 +104,7 @@ export const updateManga = catchAsync(
 
     const updates = req.body;
 
-    const manga = await Manga.findOneAndUpdate({ _id: mangaId }, updates, {
+    const updatedManga = await Manga.findOneAndUpdate({ _id: mangaId }, updates, {
       new: true, // Return the updated document
       runValidators: true,
     });
@@ -112,7 +112,7 @@ export const updateManga = catchAsync(
     res.status(200).json({
       status: 'success',
       message: 'Manga updated succesfully',
-      manga,
+      updatedManga,
     });
   },
 );
