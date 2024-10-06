@@ -35,14 +35,16 @@ export const getAverageRating = catchAsync(
 
     const objectIdItemId = new mongoose.Types.ObjectId(itemId);
 
-    const avgRating = await Rating.aggregate([
+    const avgRatingObj = await Rating.aggregate([
       { $match: { itemId: objectIdItemId } },
       { $group: { _id: '$itemId', averageRating: { $avg: '$rating' } } },
     ]);
 
+    const avgRatingNumber = avgRatingObj[0].averageRating;
+
     res.status(200).json({
       status: 'success',
-      averageRating: avgRating.length > 0 ? avgRating[0] : 0,
+      averageRating: avgRatingObj.length > 0 ? avgRatingNumber : 0,
     });
   },
 );
