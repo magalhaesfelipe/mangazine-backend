@@ -8,16 +8,17 @@ import {
 
 const router = express.Router();
 
-// Get rating
-router.route('/:userId/get-rating/:titleId').get(getRating);
-
-// Get average rating
-router.route('/average-rating/:titleId').get(getAverageRating);
+// Get a user's rating for a specific item
+router.route('/user/:userId/item/:itemId').get(getRating);
 
 // Create or update rating
-router.route('/create-update-rating').post(createRating);
+router.route('/').post(createRating);
 
-// Delete rating
-router.route('/:userId/delete-rating/:titleId').delete(deleteRating);
+// Delete a user's rating for a specific item
+router.route('/user/:userId/item/:itemId').delete(deleteRating);
+
+// Get average rating
+router.route('/:itemId/average').get(getAverageRating);
+
 
 export default router;

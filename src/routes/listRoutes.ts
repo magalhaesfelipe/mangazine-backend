@@ -11,25 +11,22 @@ import {
 
 const router = express.Router();
 
-// Checks if item exists in the list
-router.route('/:listId/item/:itemId/exists').get(checkItemExists);
-
-// Get all lists
-router.route('/get-all-lists/:userId').get(getAllLists);
+// Get all lists for a user
+router.route('/:userId/lists').get(getAllLists);
 
 // Get list by ID
-router.route('/get-list/:listId').get(getListById);
+router.route('/:listId').get(getListById).delete(deleteList);
 
-// Create list
-router.route('/create-list').post(createList);
+// Create a new list
+router.route('/').post(createList);
 
-// Delete list
-router.route('/delete-list/:listId').delete(deleteList);
+// Add item to a list
+router.route('/:listId/item/:itemId').patch(addToList);
 
-// Add to list
-router.route('/:listId/add-to-list/:itemId').patch(addToList);
+// Remove from a list
+router.route('/:listId/item/:itemId/remove').patch(removeFromList);
 
-// Remove from list
-router.route('/:listId/remove-from-list/:itemId').patch(removeFromList);
+// Check if an item exists in a list
+router.route('/:listId/item/:itemId/exists').get(checkItemExists);
 
 export default router;
