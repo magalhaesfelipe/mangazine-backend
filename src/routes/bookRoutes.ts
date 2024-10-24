@@ -9,7 +9,6 @@ import {
 
 const router = express.Router();
 
-// ssssssss
 // router.route('/').get(getAllBooks);
 router.route('/').post(createBook);
 router.route('/search').get(getBookByName);

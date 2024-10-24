@@ -27,14 +27,10 @@ export const getBookByName = catchAsync(
     if (typeof name === 'string') {
       const books = await Book.find({ name: new RegExp(name, 'i') });
 
-      if (books.length === 0) {
-        return next(new AppError('No book found with that name', 404));
-      }
-
       res.status(200).json({
         status: 'success',
         message: `${books.length} books found.`,
-        books,
+        items: books,
       });
     }
   },

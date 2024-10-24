@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 // Define an interface for the Manga document
 interface IManga extends Document {
   name: string;
+  authorName: string;
   author?: string;
   releaseYear?: string;
   description?: string;
@@ -31,7 +32,8 @@ const mangaSchema = new Schema<IManga>({
       message: 'A Manga name cannot be empty',
     },
   },
-  author: { type: String },
+  authorName: { type: String },
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },
   releaseYear: { type: String },
   description: { type: String },
   chapters: { type: String },

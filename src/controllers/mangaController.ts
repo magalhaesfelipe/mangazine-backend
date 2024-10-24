@@ -68,7 +68,7 @@ export const getMangaById = catchAsync(
 export const getMangaByName = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name } = req.query; // Get the query parameter from the URL
-    
+
     if (typeof name === 'string') {
       const mangas = await Manga.find({ name: new RegExp(name, 'i') }); // Perform case-insensitive search
 
@@ -79,7 +79,7 @@ export const getMangaByName = catchAsync(
       res.status(200).json({
         status: 'success',
         message: `${mangas.length} items found.`,
-        mangas,
+        items: mangas,
       });
     }
   },
@@ -104,10 +104,14 @@ export const updateManga = catchAsync(
 
     const updates = req.body;
 
-    const updatedManga = await Manga.findOneAndUpdate({ _id: mangaId }, updates, {
-      new: true, // Return the updated document
-      runValidators: true,
-    });
+    const updatedManga = await Manga.findOneAndUpdate(
+      { _id: mangaId },
+      updates,
+      {
+        new: true, // Return the updated document
+        runValidators: true,
+      },
+    );
 
     res.status(200).json({
       status: 'success',

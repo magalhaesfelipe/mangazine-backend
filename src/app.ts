@@ -29,7 +29,7 @@ app.use(
   }),
 );
 
-// DEVELOPMENT LOGGING
+// DEVELOPMENT CONSOLE LOGGING
 app.use(morgan('dev')); // 'dev' defines the log format
 
 // LIMIT REQUESTS A CLIENT CAN MAKE (based on their IP)
