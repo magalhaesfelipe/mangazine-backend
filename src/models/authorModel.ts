@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 
-const authorSchema = new Schema({
+// test
+const authorSchema = new Schema({ 
   name: {
     type: String,
     required: [true, 'An Author must have a name'],
