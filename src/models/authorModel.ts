@@ -1,6 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
 
-// test
 const authorSchema = new Schema({ 
   name: {
     type: String,
