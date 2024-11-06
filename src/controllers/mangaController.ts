@@ -69,19 +69,20 @@ export const getMangaByName = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name } = req.query; // Get the query parameter from the URL
 
-    if (typeof name === 'string') {
-      const mangas = await Manga.find({ name: new RegExp(name, 'i') }); // Perform case-insensitive search
-
-      if (mangas.length === 0) {
-        return next(new AppError('No mangas found with that name', 404));
-      }
-
-      res.status(200).json({
-        status: 'success',
-        message: `${mangas.length} items found.`,
-        items: mangas,
-      });
+    if (typeof name !== 'string') {
+      return next(new AppError('Invalid manga name.', 404));
     }
+
+    const mangas = await Manga.find({ name: new RegExp(name, 'i') }); // Perform case-insensitive search
+
+    res.status(200).json({
+      status: 'success',
+      message:
+        mangas.length === 0
+          ? 'No mangas found with that name.'
+          : `${mangas.length} items found.`,
+      items: mangas,
+    });
   },
 );
 

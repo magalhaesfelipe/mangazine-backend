@@ -16,6 +16,29 @@ export const getAuthorById = catchAsync(
   },
 );
 
+// GET AUTHOR BY NAME
+export const getAuthorByName = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const searchedName = req.query.name;
+    console.log(searchedName, '😁');
+
+    if (typeof searchedName !== 'string') {
+      return next(new AppError('Invalid author name.', 400));
+    }
+
+    const authors = await Author.find({ name: new RegExp(searchedName, 'i') });
+
+    res.status(200).json({
+      status: 'success',
+      message:
+        authors.length === 0
+          ? 'No authors found with that name'
+          : `${authors.length} items found.`,
+      items: authors,
+    });
+  },
+);
+
 // CREATE AUTHOR
 export const createAuthor = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

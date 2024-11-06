@@ -16,13 +16,12 @@ const bookSchema = new Schema({
   authorName: { type: String },
   releaseYear: { type: String },
   description: { type: String },
-  cover: { type: String },
   pages: { type: Number },
   genre: [{ type: String }],
   publishedBy: { type: String },
-  otherCovers: [{ type: String }],
-  alternativeName: { type: String },
   type: { type: String, default: 'book' },
+  cover: { type: String },
+  otherCovers: [{ type: String }],
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },
 });
 

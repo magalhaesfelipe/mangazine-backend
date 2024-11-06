@@ -9,11 +9,12 @@ import AppError from './utils/appError.js';
 import { globalErrorHandler } from './controllers/globalErrorHandler.js';
 
 import mangaRouter from './routes/mangaRoutes.js';
-import userRouter from './routes/userRoutes.js';
-import ratingRouter from './routes/ratingRoutes.js';
-import listRouter from './routes/listRoutes.js';
 import bookRouter from './routes/bookRoutes.js';
+import authorRouter from './routes/authorRoutes.js';
+import ratingRouter from './routes/ratingRoutes.js';
 import readlistRouter from './routes/readlistRoutes.js';
+import listRouter from './routes/listRoutes.js';
+import userRouter from './routes/userRoutes.js';
 
 const app = express();
 mongoose.set('strictQuery', false);
@@ -47,13 +48,14 @@ app.use(express.json({ limit: '10kb' }));
 app.use(mongoSanitize());
 
 // ROUTES
-app.use('/api/users', userRouter);
 app.use('/api/mangas', mangaRouter);
-app.use('/api/lists', listRouter);
-app.use('/api/ratings', ratingRouter);
 app.use('/api/books', bookRouter);
+app.use('/api/authors', authorRouter);
+app.use('/api/ratings', ratingRouter);
 app.use('/api/readlists', readlistRouter);
-  
+app.use('/api/lists', listRouter);
+app.use('/api/users', userRouter);
+
 // CATCH ALL UNDEFINED ROUTES
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
