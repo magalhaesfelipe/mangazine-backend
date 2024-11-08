@@ -25,8 +25,8 @@ export const getAllLists = catchAsync(
 export const getListById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { listId } = req.params;
+    const list = await List.findById(listId);
 
-    const list = await List.findById(listId).populate('titles');
     if (!list) {
       return next(new AppError('List not found', 404));
     }
@@ -114,7 +114,7 @@ export const addToList = catchAsync(
     return res.status(200).json({
       status: 'success',
       message: 'Item added to list',
-      list: list,
+      list,
     });
   },
 );

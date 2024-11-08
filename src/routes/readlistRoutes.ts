@@ -11,9 +11,9 @@ const router = express.Router();
 router.route('/:userId').get(getReadlist);
 
 router
-  .route('/:userId/items/:itemId')
+  .route('/:userId/item/:itemId')
   .get(checkItemExistsInReadlist)
-  .post(addToReadlist)
+  .patch(addToReadlist)
   .delete(removeItemFromReadlist);
 
 export default router;

@@ -10,7 +10,4 @@ router.route('/').post(createUser);
 // Get user
 router.route('/:userId').get(getUserById);
 
-// Get user lists
-router.route('/:userId/lists').get(getAllLists);
-
 export default router;

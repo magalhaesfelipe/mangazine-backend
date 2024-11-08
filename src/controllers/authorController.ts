@@ -8,9 +8,15 @@ import { Types } from 'mongoose';
 export const getAuthorById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const author = await Author.findById(req.params.authorId);
+    let message;
+
+    !author
+      ? (message = 'No author found with that ID')
+      : (message = 'Author found');
 
     res.status(200).json({
       status: 'success',
+      message,
       author,
     });
   },
@@ -20,7 +26,6 @@ export const getAuthorById = catchAsync(
 export const getAuthorByName = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const searchedName = req.query.name;
-    console.log(searchedName, '😁');
 
     if (typeof searchedName !== 'string') {
       return next(new AppError('Invalid author name.', 400));
@@ -33,7 +38,7 @@ export const getAuthorByName = catchAsync(
       message:
         authors.length === 0
           ? 'No authors found with that name'
-          : `${authors.length} items found.`,
+          : `${authors.length} item(s) found.`,
       items: authors,
     });
   },

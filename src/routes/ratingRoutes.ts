@@ -18,7 +18,7 @@ router.route('/').post(createRating);
 router.route('/user/:userId/item/:itemId').delete(deleteRating);
 
 // Get average rating
-router.route('/:itemId/average').get(getAverageRating);
+router.route('/item/:itemId/average').get(getAverageRating);
 
 
 export default router;

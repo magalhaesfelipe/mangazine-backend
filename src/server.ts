@@ -12,7 +12,7 @@ process.on('uncaughtException', (err) => {
 // Application code
 dotenv.config();
 const DB = process.env.DATABASE;
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 if (!DB) {
   throw new Error(
@@ -35,5 +35,21 @@ process.on('unhandledRejection', (err: any) => {
   );
   server.close(() => {
     process.exit(1); // 0 stands for success, 1 stands for uncaught exception
+  });
+});
+
+// Gracefully close the server on termination signals
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received. Shutting down gracefully...');
+  server.close(() => {
+    console.log('Process terminated.');
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT received (app termination). Shutting down gracefully...');
+  server.close(() => {
+    console.log('Process terminated.');
+    process.exit(0); // Success exit
   });
 });
