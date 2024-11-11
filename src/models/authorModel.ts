@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-const authorSchema = new Schema({ 
+const authorSchema = new Schema({
   name: {
     type: String,
     required: [true, 'An Author must have a name'],
@@ -29,8 +29,12 @@ const authorSchema = new Schema({
   },
   works: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'worksModel',
+      titleId: { type: mongoose.Schema.Types.ObjectId, ref: 'worksModel' },
+      type: {
+        type: String,
+        enum: ['manga', 'book'],
+        require: true,
+      },
     },
   ],
   worksModel: [

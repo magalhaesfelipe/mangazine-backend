@@ -17,7 +17,7 @@ export const getAuthorById = catchAsync(
     res.status(200).json({
       status: 'success',
       message,
-      author,
+      data: author,
     });
   },
 );
@@ -39,7 +39,7 @@ export const getAuthorByName = catchAsync(
         authors.length === 0
           ? 'No authors found with that name'
           : `${authors.length} item(s) found.`,
-      items: authors,
+      data: authors,
     });
   },
 );
@@ -51,7 +51,7 @@ export const createAuthor = catchAsync(
 
     res.status(201).json({
       status: 'success',
-      newAuthor,
+      data: newAuthor,
     });
   },
 );
@@ -74,7 +74,7 @@ export const updateAuthor = catchAsync(
     res.status(200).json({
       status: 'success',
       message: 'Author updated successfully',
-      updatedAuthor,
+      data: updatedAuthor,
     });
   },
 );

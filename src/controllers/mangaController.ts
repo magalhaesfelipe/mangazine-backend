@@ -59,7 +59,7 @@ export const getMangaById = catchAsync(
 
     res.status(200).json({
       status: 'success',
-      manga,
+      title: manga,
     });
   },
 );
@@ -102,12 +102,20 @@ export const createManga = catchAsync(
 export const updateManga = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { mangaId } = req.params;
-
-    const updates = req.body;
+    const { otherCovers, ...updates } = req.body;
 
     const updatedManga = await Manga.findOneAndUpdate(
       { _id: mangaId },
-      updates,
+      {
+        ...updates,
+        ...(otherCovers && {
+          $addToSet: {  // 'addToSet' will add each item in 'otherCovers' to the existing 'otherCovers' array only if it's not already there, preventing duplicates
+            otherCovers: {
+              $each: Array.isArray(otherCovers) ? otherCovers : [otherCovers],
+            },
+          },
+        }),
+      },
       {
         new: true, // Return the updated document
         runValidators: true,
