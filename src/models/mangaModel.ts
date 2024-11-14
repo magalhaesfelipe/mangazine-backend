@@ -33,21 +33,21 @@ const mangaSchema = new Schema<IManga>({
     },
   },
   authorName: { type: String },
-  author: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },
   releaseYear: { type: String },
   description: { type: String },
   chapters: { type: Number },
-  publishedBy: { type: String },
   genre: [{ type: String }],
-  status: { type: String },
+  publishedBy: { type: String },
   type: { type: String, default: 'manga' },
-  demographic: { type: String },
-  alternativeName: { type: String },
   cover: { type: String },
   otherCovers: [{ type: String }],
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },
+  status: { type: String },
+  demographic: { type: String },
+  alternativeName: { type: String },
 });
 
-// Create the model with the Manga interface
+// IManga defines the structure of a 'Manga' document
 const Manga = mongoose.model<IManga>('Manga', mangaSchema);
 
 export default Manga;
