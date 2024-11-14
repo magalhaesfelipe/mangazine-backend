@@ -59,7 +59,7 @@ export const getMangaById = catchAsync(
 
     res.status(200).json({
       status: 'success',
-      title: manga,
+      data: manga,
     });
   },
 );

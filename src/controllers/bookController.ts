@@ -15,7 +15,7 @@ export const getBookById = catchAsync(
 
     res.status(200).json({
       status: 'success',
-      book,
+      data: book,
     });
   },
 );
