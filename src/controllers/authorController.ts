@@ -60,11 +60,21 @@ export const createAuthor = catchAsync(
 export const updateAuthor = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { authorId } = req.params;
-    const updates = req.body;
+    const { works, ...updates } = req.body;
 
     const updatedAuthor = await Author.findOneAndUpdate(
       { _id: authorId },
-      updates,
+      {
+        ...updates,
+        ...(works && {
+          $addToSet: {
+            works: {
+              $each: Array.isArray(works) ? works : [works],
+            },
+          },
+        }),
+      },
+
       {
         new: true,
         runValidators: true,

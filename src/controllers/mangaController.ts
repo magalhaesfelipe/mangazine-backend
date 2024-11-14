@@ -109,13 +109,15 @@ export const updateManga = catchAsync(
       {
         ...updates,
         ...(otherCovers && {
-          $addToSet: {  // 'addToSet' will add each item in 'otherCovers' to the existing 'otherCovers' array only if it's not already there, preventing duplicates
+          $addToSet: {
+            // 'addToSet' will add each item in 'otherCovers' to the existing 'otherCovers' array only if it's not already there, preventing duplicates
             otherCovers: {
               $each: Array.isArray(otherCovers) ? otherCovers : [otherCovers],
             },
           },
         }),
       },
+
       {
         new: true, // Return the updated document
         runValidators: true,
