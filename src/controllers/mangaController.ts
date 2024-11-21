@@ -51,7 +51,7 @@ export const getAllMangas = catchAsync(
 // GET MANGA BY ID
 export const getMangaById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const manga = await Manga.findById(req.params.mangaId);
+    const manga = await Manga.findById(req.params.itemId);
 
     if (!manga) {
       return next(new AppError('No manga found with that ID', 404));
@@ -93,7 +93,7 @@ export const createManga = catchAsync(
 
     res.status(201).json({
       status: 'success',
-      newManga,
+      data: newManga,
     });
   },
 );

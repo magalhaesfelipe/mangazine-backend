@@ -14,7 +14,7 @@ router.route('/').get(getAllMangas).post(createManga);
 router.route('/search').get(getMangaByName);
 
 router
-  .route('/:mangaId')
+  .route('/:itemId')
   .get(getMangaById)
   .patch(updateManga)
   .delete(deleteManga);

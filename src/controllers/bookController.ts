@@ -43,7 +43,7 @@ export const createBook = catchAsync(
 
     res.status(201).json({
       status: 'success',
-      newBook,
+      data: newBook,
     });
   },
 );

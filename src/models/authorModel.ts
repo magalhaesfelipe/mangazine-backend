@@ -32,7 +32,7 @@ const authorSchema = new Schema({
       titleId: { type: mongoose.Schema.Types.ObjectId, ref: 'worksModel' },
       type: {
         type: String,
-        enum: ['manga', 'book'],
+        enum: ['manga', 'manhwa', 'manhua', 'comics', 'book'],
         require: true,
       },
     },
