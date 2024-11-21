@@ -27,23 +27,6 @@ const authorSchema = new Schema({
   photo: {
     type: String,
   },
-  works: [
-    {
-      titleId: { type: mongoose.Schema.Types.ObjectId, ref: 'worksModel' },
-      type: {
-        type: String,
-        enum: ['manga', 'manhwa', 'manhua', 'comics', 'book'],
-        require: true,
-      },
-    },
-  ],
-  worksModel: [
-    {
-      type: String,
-      required: true,
-      enum: ['Manga', 'Book'],
-    },
-  ],
   otherPhotos: [{ type: String }],
 });
 
