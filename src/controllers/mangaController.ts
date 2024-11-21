@@ -86,6 +86,24 @@ export const getMangaByName = catchAsync(
   },
 );
 
+// GET MANGA BY AUTHOR
+export const getMangaByAuthor = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { author } = req.query;
+
+    const mangas = await Manga.find({ author: author });
+
+    res.status(200).json({
+      status: 'success',
+      message:
+        mangas.length === 0
+          ? 'No manga found with that author'
+          : `${mangas.length} manga found.`,
+      data: mangas,
+    });
+  },
+);
+
 // CREATE MANGA      This entire async fn is passed as parameter to catchAsync
 export const createManga = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
