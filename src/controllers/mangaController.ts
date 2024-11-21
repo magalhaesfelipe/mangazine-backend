@@ -97,7 +97,7 @@ export const getMangaByAuthor = catchAsync(
       status: 'success',
       message:
         mangas.length === 0
-          ? 'No manga found with that author'
+          ? 'No manga found with that author.'
           : `${mangas.length} manga found.`,
       data: mangas,
     });

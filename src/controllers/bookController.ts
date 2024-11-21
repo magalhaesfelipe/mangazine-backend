@@ -29,10 +29,31 @@ export const getBookByName = catchAsync(
 
       res.status(200).json({
         status: 'success',
-        message: `${books.length} books found.`,
+        message:
+          books.length === 0
+            ? 'No books found with that name.'
+            : `${books.length} books found.`,
         items: books,
       });
     }
+  },
+);
+
+// GET BOOK BY AUTHOR
+export const getBookByAuthor = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { author } = req.query;
+
+    const books = await Book.find({ author: author });
+
+    res.status(200).json({
+      status: 'success',
+      message:
+        books.length === 0
+          ? 'No book found with that author.'
+          : `${books.length} books found.`,
+      data: books,
+    });
   },
 );
 
