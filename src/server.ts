@@ -40,14 +40,14 @@ process.on('unhandledRejection', (err: any) => {
 
 // Gracefully close the server on termination signals
 process.on('SIGTERM', () => {
-  console.log('SIGTERM received. Shutting down gracefully...');
+  console.log('SIGTERM received. Shutting down...');
   server.close(() => {
     console.log('Process terminated.');
   });
 });
 
 process.on('SIGINT', () => {
-  console.log('SIGINT received (app termination). Shutting down gracefully...');
+  console.log('SIGINT received (app termination). Shutting down...');
   server.close(() => {
     console.log('Process terminated.');
     process.exit(0); // Success exit
