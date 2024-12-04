@@ -14,7 +14,7 @@ export const getReadlist = catchAsync(
 
     res.status(200).json({
       status: 'success',
-      readlist,
+      data: readlist,
     });
   },
 );

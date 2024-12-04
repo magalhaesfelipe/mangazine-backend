@@ -16,7 +16,7 @@ export const getUserById = catchAsync(
     }
     return res.status(200).json({
       status: 'success',
-      user,
+      data: user,
     });
   },
 );
