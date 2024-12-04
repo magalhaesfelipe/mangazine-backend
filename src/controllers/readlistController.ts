@@ -8,7 +8,10 @@ import { Types } from 'mongoose';
 export const getReadlist = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.params;
-    const readlist = await Readlist.findOne({ userId });
+    const readlist = await Readlist.findOne({ userId }).populate({
+      path: 'items.itemId',
+      populate: { path: 'itemId' },
+    });
 
     console.log('Fetched Readlist: ', readlist);
 
@@ -46,8 +49,9 @@ export const checkItemExistsInReadlist = catchAsync(
 
 // CREATE READLIST
 export const createReadlist = async (userId: string) => {
-    const readlist = await Readlist.create({
-    userId: userId, 
+  const readlist = await Readlist.create({
+    userId: userId,
+    items: [],
   });
 
   return readlist;
@@ -56,9 +60,16 @@ export const createReadlist = async (userId: string) => {
 // ADD ITEM TO THE READLIST
 export const addToReadlist = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { userId, itemId } = req.params;
+    const { userId, itemId, itemModel: } = req.params;
 
-    const readlist = await Readlist.findOne({ userId });
+    const readlist = await Readlist.findOneAndUpdate(
+      { userId },
+      {
+        $push: {
+          items: {itemId, itemModel }
+        }
+      }
+    );
 
     if (!readlist) return next(new AppError('Readlist not found', 404));
 

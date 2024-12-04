@@ -5,15 +5,12 @@ const readlistSchema = new mongoose.Schema(
     userId: { type: String, required: true, unique: true },
     items: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        refPath: 'itemsModel',
-      },
-    ],
-    itemsModel: [
-      {
-        type: String,
-        required: true, 
-        enum: ['Manga', 'Book'],
+        itemId: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          refPath: 'items.itemModel',
+        },
+        itemModel: { type: String, required: true, enum: ['Manga', 'Book'] },
       },
     ],
   },
