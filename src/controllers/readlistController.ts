@@ -3,15 +3,30 @@ import catchAsync from '../utils/catchAsync.js';
 import Readlist from '../models/readlistModel.js';
 import AppError from '../utils/appError.js';
 import { Types } from 'mongoose';
+import Manga from '../models/mangaModel.js';
+import Book from '../models/bookModel.js';
 
 // GET READLIST
 export const getReadlist = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.params;
-    const readlist = await Readlist.findOne({ userId }).populate({
-      path: 'items.itemId',
-      populate: { path: 'itemId' },
-    });
+
+    const readlist = await Readlist.findOne({ userId });
+
+    if (!readlist) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Readlist not found!',
+      });
+    }
+
+    for (let item of readlist.items) {
+      if (item.itemModel === 'Manga') {
+        item.itemId = await Manga.findById(item.itemId);
+      } else if (item.itemModel === 'Book') {
+        item.itemId = await Book.findById(item.itemId);
+      }
+    }
 
     console.log('Fetched Readlist: ', readlist);
 
@@ -35,67 +50,91 @@ export const checkItemExistsInReadlist = catchAsync(
       return next(new AppError('Invalid item ID format', 400));
     }
 
-    const readlist = await Readlist.findOne({ userId });
+    const item = await Readlist.findOne({
+      userId,
+      'items.itemId': itemObjectId,
+    });
 
-    if (!readlist) return next(new AppError('Readlist not found', 404));
+    let exists;
 
-    if (readlist.items.includes(itemObjectId)) {
-      return res.status(200).json({ exists: true });
+    if (item) {
+      exists = true;
+    } else {
+      exists = false;
     }
 
-    return res.status(200).json({ exists: false });
+    res.status(200).json({ exists: exists });
   },
 );
 
 // CREATE READLIST
-export const createReadlist = async (userId: string) => {
-  const readlist = await Readlist.create({
-    userId: userId,
-    items: [],
-  });
-
-  return readlist;
-};
-
-// ADD ITEM TO THE READLIST
-export const addToReadlist = catchAsync(
+export const createReadlist = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { userId, itemId, itemModel: } = req.params;
+    const { userId } = req.params;
 
-    const readlist = await Readlist.findOneAndUpdate(
-      { userId },
-      {
-        $push: {
-          items: {itemId, itemModel }
-        }
-      }
-    );
+    const readlist = await Readlist.create({
+      userId: userId,
+      items: [],
+    });
 
-    if (!readlist) return next(new AppError('Readlist not found', 404));
-
-    readlist.items.push(itemId as any);
-    await readlist.save();
-
-    res.status(200).json({
+    res.status(201).json({
       status: 'success',
-      message: 'Item added!',
-      readlist,
+      message: 'Readlist created successfully',
+      data: readlist,
     });
   },
 );
 
-// REMOVE ITEM FROM THE READLIST
+// ADD ITEM TO THE READLIST
+export const addToReadlist = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId } = req.params;
+    const { items } = req.body;
+
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'No items provided or items is not an array!',
+      });
+    }
+
+    const updatedReadlist = await Readlist.findOneAndUpdate(
+      { userId },
+      {
+        $push: {
+          items: { $each: items }, // This will add multiple items to the array
+        },
+      },
+      { new: true }, // This will return the updated document
+    );
+
+    if (!updatedReadlist) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Readlist not found',
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Items added!',
+      data: updatedReadlist,
+    });
+  },
+);
+
+// DELETE ITEM FROM THE READLIST
 export const removeItemFromReadlist = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId, itemId } = req.params;
 
     const result = await Readlist.updateOne(
       { userId },
-      { $pull: { items: itemId } },
+      { $pull: { items: { itemId: itemId } } },
     );
 
     if (result.matchedCount === 0) {
-      return next(new AppError('Item not found', 404));
+      return next(new AppError('Item to delete not found', 404));
     }
 
     res.status(204).send();

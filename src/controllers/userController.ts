@@ -26,15 +26,11 @@ export const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, email, userId } = req.body;
 
-    // Create the default readlist for the user
-    const readlist = await createReadlist(userId);
-
     // Create the new user with the default readlist
     const newUser = await User.create({
       name,
       email,
       userId,
-      readList: readlist._id,
     });
 
     res.status(201).json({
