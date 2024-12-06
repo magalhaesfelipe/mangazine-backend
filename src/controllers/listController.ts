@@ -4,6 +4,8 @@ import { List } from '../models/listModel.js';
 import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
 import { Types } from 'mongoose';
+import Manga from '../models/mangaModel.js';
+import Book from '../models/bookModel.js';
 
 // GET ALL LISTS
 export const getAllLists = catchAsync(
@@ -16,7 +18,7 @@ export const getAllLists = catchAsync(
 
     res.status(200).json({
       status: 'success',
-      lists,
+      data: lists,
     });
   },
 );
@@ -25,15 +27,24 @@ export const getAllLists = catchAsync(
 export const getListById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { listId } = req.params;
+
     const list = await List.findById(listId);
 
     if (!list) {
       return next(new AppError('List not found', 404));
     }
 
+    for (let item of list.items) {
+      if (item.itemModel === 'Manga') {
+        item.itemId = await Manga.findById(item.itemId);
+      } else if (item.itemModel === 'Book') {
+        item.itemId = await Book.findById(item.itemId);
+      }
+    }
+
     res.status(200).json({
       status: 'sucess',
-      list,
+      data: list,
     });
   },
 );
@@ -51,15 +62,19 @@ export const checkItemExists = catchAsync(
     // Using projection to check for the title's existence
     // and only passing the '_id' to the 'list' variable, instead of the full list document, with other fields like 'name'
     const list = await List.findOne(
-      { _id: listId, items: itemId }, // Filter the List collection for a document with the  fields '_id' and 'titles' equal to the listId and titleId received in the params
+      { _id: listId, items: { $elemMatch: { itemId } } }, // Filter the List collection for a document with the  fields '_id' and 'titles' equal to the listId and titleId received in the params
       { _id: 1 }, // Only fetch(projects/returns) the _id field, so we don't need to return the full document(heavier)
     );
 
+    let exists;
+
     if (list) {
-      return res.status(200).json({ exists: true });
+      exists = true;
+    } else {
+      exists = false;
     }
 
-    return res.status(200).json({ exists: false });
+    return res.status(200).json({ exists: exists });
   },
 );
 
@@ -70,23 +85,14 @@ export const createList = catchAsync(
 
     // Create the list
     const newList = await List.create({
+      userId,
       name,
       items,
-      userId,
     });
-
-    // Update the user's lists
-    await User.findOneAndUpdate(
-      { userId },
-      { $push: { lists: newList._id } },
-      { new: true, useFindAndModify: false },
-    );
 
     res.status(201).json({
       status: 'success',
-      data: {
-        list: newList,
-      },
+      data: newList,
     });
   },
 );
@@ -104,17 +110,22 @@ export const deleteList = catchAsync(
 // ADD ITEM TO LIST
 export const addToList = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { itemId, listId } = req.params;
-    const list = await List.findOne({ _id: listId });
+    const { listId } = req.params;
+    const { itemId, itemModel } = req.body;
 
+    const list = await List.findById({ _id: listId });
     if (!list) return next(new AppError('List not found', 404));
 
-    await List.updateOne({ _id: listId }, { $push: { items: itemId } });
+    list.items.push({ itemId, itemModel });
+    await list.save().catch((error) => {
+      console.log('Error saving list: ', error.message);
+      return next(new AppError('FAILED TO UPDATE LIST', 500));
+    });
 
     return res.status(200).json({
       status: 'success',
       message: 'Item added to list',
-      list,
+      data: list,
     });
   },
 );
@@ -133,7 +144,7 @@ export const removeFromList = catchAsync(
     return res.status(200).json({
       status: 'success',
       message: 'Item removed from list',
-      list: list,
+      data: list,
     });
   },
 );

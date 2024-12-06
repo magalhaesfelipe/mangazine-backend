@@ -19,7 +19,7 @@ const bookSchema = new Schema({
   genre: [{ type: String }],
   pages: { type: Number },
   publishedBy: { type: String },
-  type: { type: String, default: 'book' },
+  type: { type: String, default: 'Book' },
   cover: { type: String },
   otherCovers: [{ type: String }],
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },

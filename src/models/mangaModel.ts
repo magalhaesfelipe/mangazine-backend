@@ -38,7 +38,7 @@ const mangaSchema = new Schema<IManga>({
   chapters: { type: Number },
   genre: [{ type: String }],
   publishedBy: { type: String },
-  type: { type: String, default: 'manga' },
+  type: { type: String, default: 'Manga' },
   cover: { type: String },
   otherCovers: [{ type: String }],
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },

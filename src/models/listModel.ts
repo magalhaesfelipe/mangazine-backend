@@ -1,15 +1,29 @@
 import mongoose from 'mongoose';
 
-const listSchema = new mongoose.Schema(
+interface IItem {
+  itemId: mongoose.Types.ObjectId | null;
+  itemModel: 'Manga' | 'Book';
+}
+
+interface IReadlist extends Document {
+  name: string;
+  userId: string;
+  items: IItem[];
+}
+
+const listSchema = new mongoose.Schema<IReadlist>(
   {
     name: { type: String, required: true },
     userId: { type: String, required: true },
-    items: [{ type: mongoose.Schema.Types.ObjectId, refPath: 'itemsModel' }],
-    itemsModel: [
+    items: [
       {
-        type: String,
-        required: true,
-        enum: ['Manga', 'Book'],
+        itemId: {
+          type: mongoose.Schema.Types.ObjectId,
+          refPath: 'items.itemModel',
+          required: true,
+          default: null,
+        },
+        itemModel: { type: String, required: true, enum: ['Manga', 'Book'] },
       },
     ],
   },
